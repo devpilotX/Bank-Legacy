@@ -82,3 +82,28 @@ A plain log of the choices we made while building, so anyone picking this up lat
 
 - **Carbon's full stylesheet is about 89 KB gzipped.** That is fine for an internal tool. If we
   ever want it smaller, we can import only the component styles we use.
+
+
+## 2026-06-27, backend engine
+
+- **Sign-in uses JWT with two roles.** Logging in issues an HS256 token (built with Spring
+  Security's Nimbus support, no extra library). The roles admin and engineer ride inside the
+  token, so checks need no extra database hit. The signing secret and the first admin account
+  both come from config, never the code.
+- **Files are stored on disk, not in the database.** Uploads stream to disk in small chunks, so
+  a huge COBOL file or a big zip never sits in memory. The database keeps the facts about each
+  file (name, type, size, line count, checksum, who uploaded) and a key pointing at the bytes.
+- **Every AI call goes through one place.** A swappable provider, Claude or GPT picked by config,
+  sits behind a wrapper that adds timeouts, retries with backoff, and clear errors. Keys live in
+  config only. The app starts fine without a key; AI calls just return a clear "not set up" error.
+- **Anything the AI produces is a draft a person approves.** That holds for code explanations,
+  suggested dependency links, first-draft Java translations, and AI-drafted test cases. We record
+  who approved and when, so a human is always in the loop before anything is trusted.
+- **The dependency map mixes parsing and AI.** Parsing finds the obvious CALL and COPY links and
+  marks them confirmed. The AI suggests trickier links, marked for a human to confirm or reject.
+  Building the map never depends on the AI; the AI part is opt-in.
+- **The verification engine that compiles and runs the rewritten Java is future work.** For now we
+  store test cases and runs and compare outputs, so the data and the API are ready for it.
+- **Flyway owns the schema, now V1 through V7.** Each table carries plain-language comments in the
+  database itself. Errors come back in one ApiError shape, in plain words, with no stack traces.
+- See `docs/api.md` for what every endpoint does, takes, and returns.
