@@ -1,0 +1,22 @@
+# Keep line endings sane across Windows, Mac, and Linux.
+# Text files are stored with LF in the repo; Git converts on checkout when needed.
+* text=auto eol=lf
+
+# Windows batch files must stay CRLF or they break.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# The Maven wrapper shell script must stay LF so it runs in bash.
+mvnw text eol=lf
+
+# Treat these as binary so Git does not try to change them.
+*.jar binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.woff binary
+*.woff2 binary
