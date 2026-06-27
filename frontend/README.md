@@ -33,3 +33,11 @@ This type-checks the code and writes a production build to `dist/`.
   Carbon instead of hand rolling UI it already does well.
 - The product name shows as "Corewise Modernization" for now. It is a working name and
   lives in `src/branding.ts`, so it is a one line change if we pick something else.
+
+
+## Signing in
+
+Start the backend too (see the backend README), then open the dev server and sign in. For local
+work, the first admin is created from `backend/application-local.properties`: the email
+`admin@corewise.local` and the password set there. After you sign in you can move between the
+sections in the side nav, switch the theme from the header, and sign out from the header.

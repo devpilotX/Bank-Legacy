@@ -107,3 +107,22 @@ A plain log of the choices we made while building, so anyone picking this up lat
 - **Flyway owns the schema, now V1 through V7.** Each table carries plain-language comments in the
   database itself. Errors come back in one ApiError shape, in plain words, with no stack traces.
 - See `docs/api.md` for what every endpoint does, takes, and returns.
+
+
+## 2026-06-27, frontend app frame
+
+- **Routing with React Router.** The app is one protected area (the Carbon UI Shell with the side
+  nav and the seven sections) plus a public login route. Signed-out people are sent to login.
+- **One API layer.** Every backend call goes through `src/api/client.ts`, which attaches the token,
+  expects JSON, and turns any failure into a single `ApiClientError` with a plain, ready-to-show
+  message. A 401 clears the token and signs the user out everywhere at once.
+- **The backend URL comes from config** (`VITE_API_BASE_URL`), empty in dev so the Vite proxy
+  forwards `/api` and `/health` to port 8080. Set it for production.
+- **The token lives in localStorage** so a refresh keeps you signed in. That suits an internal tool
+  behind a login. If we ever need a higher bar, the move is httpOnly cookies plus CSRF, or an
+  in-memory token with a refresh token. All token access goes through one session module.
+- **Theme is a provider now**, so it covers the login screen too. g100 dark is the default, g10 is
+  the light option, and the choice is remembered. Colors come from Carbon tokens, never hardcoded.
+- **Shared LoadingState and ErrorState plus a `useApi` hook** set the pattern every data screen
+  follows: show a loader, then the data, or a calm message with a way to try again. The dashboard's
+  backend check is the first place that uses it.

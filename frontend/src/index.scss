@@ -59,3 +59,95 @@ body {
 .status-card__meta {
   color: var(--cds-text-secondary);
 }
+
+
+// On wide screens the side nav is always shown, so the content sits to its right.
+// 16rem is the Carbon side nav width.
+@media (min-width: 66rem) {
+  .cds--content.app-content {
+    margin-left: 16rem;
+  }
+}
+
+// Page scaffolding. Colors come from Carbon tokens so they follow the theme.
+.page {
+  max-inline-size: 60rem;
+}
+
+.page__title {
+  margin: 0 0 0.5rem;
+}
+
+.page__intro {
+  margin: 0 0 1.5rem;
+  max-inline-size: 44rem;
+  color: var(--cds-text-secondary);
+}
+
+.page__muted {
+  color: var(--cds-text-secondary);
+}
+
+// A small info card.
+.card {
+  margin-block-start: 1rem;
+  max-inline-size: 28rem;
+}
+
+.card__title {
+  margin: 0 0 0.25rem;
+}
+
+.card__help {
+  margin: 0 0 1rem;
+  color: var(--cds-text-secondary);
+}
+
+.card__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+// Shared loading and error blocks.
+.state-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+
+.state-block__title {
+  margin: 0;
+}
+
+.state-block__text {
+  margin: 0;
+  color: var(--cds-text-secondary);
+}
+
+// The login screen: one calm card in the middle of the page.
+.login {
+  min-block-size: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.login__card {
+  inline-size: 100%;
+  max-inline-size: 24rem;
+  padding: 2rem;
+}
+
+.login__brand {
+  margin: 0 0 0.25rem;
+  color: var(--cds-text-secondary);
+  font-size: 0.875rem;
+}
+
+.login__title {
+  margin: 0 0 1.5rem;
+}
