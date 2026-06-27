@@ -521,3 +521,26 @@ body {
   padding: 0.75rem;
   margin-block-end: 1rem;
 }
+
+
+// Verification.
+.verify-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-block-end: 1rem;
+}
+
+.verify-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.verify-field code {
+  white-space: pre-wrap;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.8125rem;
+}
