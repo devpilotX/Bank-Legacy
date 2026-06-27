@@ -42,8 +42,9 @@ From Git Bash, in the repo root:
 cd backend
 
 # Make your own local settings file from the example, then fill in real values.
-cp src/main/resources/application-example.properties src/main/resources/application-local.properties
-# Open application-local.properties and set your database name, user, and password.
+cp application-example.properties application-local.properties
+# Open application-local.properties and set your database password (and the url
+# and username too if your local setup is different).
 
 ./mvnw spring-boot:run
 ```
