@@ -1,0 +1,4 @@
+target/
+var/
+application-local.properties
+*.log

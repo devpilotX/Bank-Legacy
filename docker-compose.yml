@@ -1,0 +1,69 @@
+# Brings up the whole platform with one command:
+#
+#   docker compose up --build
+#
+# It starts PostgreSQL, the backend API, the internal frontend, and the public site.
+# The database is not published to your host or the internet; only the backend can
+# reach it on the private compose network. Settings come from a .env file next to this
+# one (copy .env.example to .env and fill it in).
+
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: ${DB_NAME:-modernization}
+      POSTGRES_USER: ${DB_USER:-modernization_app}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-modernization_app} -d ${DB_NAME:-modernization}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    # No ports here on purpose: the database stays private.
+
+  backend:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:-modernization}
+      DB_USERNAME: ${DB_USER:-modernization_app}
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      APP_JWT_SECRET: ${APP_JWT_SECRET:?set APP_JWT_SECRET in .env}
+      APP_ADMIN_EMAIL: ${APP_ADMIN_EMAIL:-}
+      APP_ADMIN_PASSWORD: ${APP_ADMIN_PASSWORD:-}
+      APP_ADMIN_NAME: ${APP_ADMIN_NAME:-Admin}
+      APP_AI_PROVIDER: ${APP_AI_PROVIDER:-claude}
+      APP_AI_OPENAI_API_KEY: ${APP_AI_OPENAI_API_KEY:-}
+      APP_AI_OPENAI_BASE_URL: ${APP_AI_OPENAI_BASE_URL:-https://api.openai.com}
+      APP_AI_OPENAI_MODEL: ${APP_AI_OPENAI_MODEL:-gpt-4o}
+      APP_AI_CLAUDE_API_KEY: ${APP_AI_CLAUDE_API_KEY:-}
+      APP_AI_CLAUDE_MODEL: ${APP_AI_CLAUDE_MODEL:-claude-3-5-sonnet-latest}
+      APP_CORS_ORIGINS: ${APP_CORS_ORIGINS:-http://localhost:8081}
+    volumes:
+      - storage:/data/storage
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+
+  website:
+    build: ./website
+    ports:
+      - "8082:80"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  storage:

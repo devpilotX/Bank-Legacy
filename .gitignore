@@ -5,6 +5,7 @@ application-local.yaml
 *-local.properties
 .env
 .env.*
+!.env.example
 secrets.*
 
 # ---- Java / Maven ----
