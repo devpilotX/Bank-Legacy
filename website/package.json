@@ -1,0 +1,27 @@
+{
+  "name": "corewise-website",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@carbon/react": "^1.110.0",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.18.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "sass": "^1.101.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.0"
+  }
+}

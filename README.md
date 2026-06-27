@@ -3,21 +3,21 @@
 We help small US banks read and safely modernize their old COBOL systems. AI reads the old
 code fast. Our engineers check every result, so nothing breaks. COBOL goes in, Java comes out.
 
-This repo holds two things:
+This repo holds three things:
 
 - **backend** is the internal web app's API. Java 21 and Spring Boot. It takes in old code,
   calls a hosted AI to explain it, maps how the parts connect, helps rewrite pieces into
   Java, and checks the new code behaves like the old code. Only our team uses it.
-- **frontend** is the screens our engineers use, built with React and IBM Carbon. We set it
-  up in the next step.
-
-There is also a small public website coming later, just enough to show banks we are real.
+- **frontend** is the screens our engineers use, built with React and IBM Carbon.
+- **website** is the small public site, just enough to show banks we are real. It is its own
+  React and Carbon app, fully separate from the internal tool.
 
 ## Layout
 
 ```
 backend/    Java 21 + Spring Boot API, PostgreSQL, Flyway migrations
-frontend/   React + IBM Carbon (TypeScript), set up in the next step
+frontend/   The internal tool: React + IBM Carbon (TypeScript)
+website/    The public site: a separate React + IBM Carbon app
 docs/       Notes and the running list of decisions
 ```
 
@@ -74,6 +74,19 @@ npm run dev
 Then open the address Vite prints, usually http://localhost:5173. The dev server forwards
 `/health` and `/api` calls to the backend on port 8080, so run the backend too to see the
 status turn green. There is more detail in `frontend/README.md`.
+
+## Run the website
+
+From Git Bash, in the repo root:
+
+```bash
+cd website
+npm install
+npm run dev
+```
+
+Then open the address Vite prints, usually http://localhost:5174. The public site is fully
+separate from the internal tool. There is more detail in `website/README.md`.
 
 ## A note on secrets
 

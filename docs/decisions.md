@@ -126,3 +126,19 @@ A plain log of the choices we made while building, so anyone picking this up lat
 - **Shared LoadingState and ErrorState plus a `useApi` hook** set the pattern every data screen
   follows: show a loader, then the data, or a calm message with a way to try again. The dashboard's
   backend check is the first place that uses it.
+
+
+## 2026-06-27, public website
+
+- **The public site is its own app in `website/`.** It shares no code with the internal tool and
+  never calls the internal backend, so nothing internal can leak through it. It runs on its own
+  port (5174) in development.
+- **Light theme, always.** It uses Carbon's White theme, with no theme switch, since it is public
+  facing. Colors come from Carbon tokens.
+- **Hand-made wordmark.** The logo is a small original SVG: two blocks and a line, the old core
+  carried across to the new one. It uses currentColor, so there are no image files and no clip art.
+- **The contact form keeps messages in the browser until a real handler is set.** Point
+  VITE_CONTACT_ENDPOINT at an email service or a small handler, and set VITE_CONTACT_EMAIL, before
+  launch. We chose this so the site stays a simple static app with nothing wired to the internal tool.
+- **Five short pages, plain writing.** Home, What we do, Who we help, Why us, Contact. The words are
+  the point here, so they are written plainly and honestly, in the same voice as everywhere else.
