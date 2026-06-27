@@ -88,15 +88,21 @@ export function ContactPage() {
     <div className="container">
       <h1 className="page-title">Contact</h1>
       <p className="lead">
-        Tell us a little about your situation. We will get back to you, usually within a day or two.
-        No pitch, no pressure.
+        Tell us a little about your situation. We will get back to you, usually within a day or two. No pitch,
+        no pressure.
       </p>
 
       <div className="contact-grid">
         <Form className="contact-form" onSubmit={onSubmit}>
           <Stack gap={6}>
             {error && (
-              <InlineNotification kind="error" lowContrast hideCloseButton title="Please check the form" subtitle={error} />
+              <InlineNotification
+                kind="error"
+                lowContrast
+                hideCloseButton
+                title="Please check the form"
+                subtitle={error}
+              />
             )}
             <TextInput
               id="contact-name"

@@ -10,13 +10,13 @@ export function HomePage() {
           When your last COBOL expert retires, who will understand your core system?
         </h1>
         <p className="hero__lead">
-          Most community banks still run on COBOL. It works. But the people who wrote it are
-          retiring, and the knowledge is walking out the door with them.
+          Most community banks still run on COBOL. It works. But the people who wrote it are retiring, and the
+          knowledge is walking out the door with them.
         </p>
         <p className="hero__lead">
-          We help you hold on to it. We read your old systems, write down clearly how they work,
-          and modernize them one safe piece at a time. AI reads the code fast. Experienced engineers
-          check every result, so nothing breaks.
+          We help you hold on to it. We read your old systems, write down clearly how they work, and modernize
+          them one safe piece at a time. AI reads the code fast. Experienced engineers check every result, so
+          nothing breaks.
         </p>
         <div className="cta-row">
           <Button size="lg" onClick={() => navigate('/contact')}>

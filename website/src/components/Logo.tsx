@@ -10,14 +10,7 @@ type LogoProps = {
 export function Logo({ withText = true }: LogoProps) {
   return (
     <span className="logo">
-      <svg
-        className="logo__mark"
-        viewBox="0 0 32 24"
-        width="34"
-        height="26"
-        role="img"
-        aria-label="Corewise"
-      >
+      <svg className="logo__mark" viewBox="0 0 32 24" width="34" height="26" role="img" aria-label="Corewise">
         <rect
           x="1.5"
           y="6.75"
