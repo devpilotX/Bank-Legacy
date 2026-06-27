@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Button,
   InlineNotification,
@@ -34,7 +35,9 @@ export function CodeTab() {
   const { project } = useProjectContext();
   const filesState = useApi<SourceFile[]>(() => listFiles(project.id), [project.id]);
 
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [searchParams] = useSearchParams();
+  const fileParam = searchParams.get('file');
+  const [selectedId, setSelectedId] = useState<number | null>(fileParam ? Number(fileParam) : null);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState<{ kind: 'success' | 'error'; text: string } | null>(null);
