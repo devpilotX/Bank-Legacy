@@ -55,3 +55,30 @@ A plain log of the choices we made while building, so anyone picking this up lat
 - **Tests do not need a database yet.** The health test is a web-only slice test, so the build
   stays fast and self-contained. We will add full database tests (with a throwaway PostgreSQL)
   when we start writing data code.
+
+
+## 2026-06-27, frontend foundation
+
+- **Vite is the build tool.** It is the current standard for React and TypeScript and is fast.
+  Create React App is no longer maintained, so we did not use it.
+
+- **React 19.** Carbon 1.110 supports it, and it is the current release.
+
+- **I hand wrote the project files instead of running the Vite scaffolder.** The interactive
+  scaffolder stalls in this non-interactive setup, so writing the small set of config files by
+  hand was the reliable way and gave us exactly the layout we want.
+
+- **Dark by default, switchable, and remembered.** The tool starts in Carbon's g100 dark theme
+  because engineers stare at it for hours. The header toggle flips to the g10 light theme, and
+  the choice is saved. A tiny script in index.html sets the saved theme before the page paints,
+  so there is no flash of the wrong colors.
+
+- **IBM Plex Sans is self-hosted.** We load Carbon's typeface through fontsource so there is no
+  outside font CDN to depend on when this runs on our VPS behind Cloudflare.
+
+- **The dev server proxies to the backend.** Calls to /health and /api go to the Spring Boot app
+  on port 8080 during development, so the browser does not hit cross-origin problems. The first
+  screen uses this to show whether the backend is reachable, in plain words.
+
+- **Carbon's full stylesheet is about 89 KB gzipped.** That is fine for an internal tool. If we
+  ever want it smaller, we can import only the component styles we use.
