@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class SourceFileService {
 
     public static final String STATUS_RECEIVED = "received";
+
+    // The kinds of files we accept on their own. A zip may carry these too. We reject
+    // anything else, so the tool never takes in a random binary.
+    private static final Set<String> ALLOWED_EXTENSIONS =
+        Set.of("cbl", "cob", "cobol", "cpy", "cpybk", "jcl", "pli", "pl1", "asm", "txt", "dat");
 
     private final SourceFileRepository files;
     private final StorageService storage;
@@ -41,6 +47,7 @@ public class SourceFileService {
         if (file == null || file.isEmpty()) {
             throw new BadRequestException("No file was uploaded, or it was empty.");
         }
+        requireAllowedSourceFile(file.getOriginalFilename());
         try (InputStream in = file.getInputStream()) {
             return saveStream(projectId, uploadedBy, file.getOriginalFilename(), file.getContentType(), in);
         } catch (IOException e) {
@@ -53,6 +60,10 @@ public class SourceFileService {
         projects.getById(projectId);
         if (zip == null || zip.isEmpty()) {
             throw new BadRequestException("No zip was uploaded, or it was empty.");
+        }
+        String zipName = zip.getOriginalFilename();
+        if (zipName == null || !zipName.toLowerCase(Locale.ROOT).endsWith(".zip")) {
+            throw new BadRequestException("Please upload a .zip file.");
         }
         List<SourceFile> saved = new ArrayList<>();
         try (ZipInputStream zipIn = new ZipInputStream(zip.getInputStream())) {
@@ -102,6 +113,21 @@ public class SourceFileService {
             stored.size(), stored.lineCount(), stored.checksum(), contentType, stored.storageKey(),
             STATUS_RECEIVED, uploadedBy);
         return files.save(sourceFile);
+    }
+
+    private void requireAllowedSourceFile(String filename) {
+        if (!ALLOWED_EXTENSIONS.contains(extensionOf(filename))) {
+            throw new BadRequestException(
+                "We only take in source files like COBOL, copybooks, and JCL. That file type is not allowed.");
+        }
+    }
+
+    private String extensionOf(String filename) {
+        if (filename == null) {
+            return "";
+        }
+        int dot = filename.lastIndexOf('.');
+        return dot >= 0 ? filename.substring(dot + 1).toLowerCase(Locale.ROOT) : "";
     }
 
     /** A rough guess at the language from the file extension, good enough to group files. */
