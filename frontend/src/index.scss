@@ -544,3 +544,76 @@ body {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 0.8125rem;
 }
+
+
+// Mapping report.
+.report__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-block-end: 1rem;
+}
+
+.report__doc {
+  max-inline-size: 48rem;
+}
+
+.report__doc h1 {
+  margin: 0 0 0.25rem;
+}
+
+.report__doc h2 {
+  margin: 1.5rem 0 0.5rem;
+  padding-block-end: 0.25rem;
+  border-block-end: 1px solid var(--cds-border-subtle);
+}
+
+.report__doc h3 {
+  margin: 1rem 0 0.25rem;
+}
+
+.report__doc p {
+  margin: 0 0 0.75rem;
+  line-height: 1.5;
+}
+
+.report__doc ul {
+  margin: 0 0 0.75rem;
+  padding-inline-start: 1.25rem;
+  line-height: 1.5;
+}
+
+.report__muted {
+  margin: 0;
+  color: var(--cds-text-secondary);
+}
+
+.report__block {
+  margin-block-end: 1rem;
+}
+
+// When printing or saving to PDF, hide the app and show only the report, in plain
+// black on white so it reads well on paper no matter the on-screen theme.
+@media print {
+  .cds--header,
+  .cds--side-nav,
+  .project-head,
+  .cds--tabs,
+  .report__actions {
+    display: none !important;
+  }
+
+  .cds--content.app-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  .report,
+  .report * {
+    color: #000 !important;
+  }
+}
