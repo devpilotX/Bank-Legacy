@@ -54,3 +54,7 @@ desktop.ini
 
 # ---- IBM Carbon source, downloaded for reference only ----
 /carbon-main/
+
+
+# ---- Uploaded source files stored on disk (local dev) ----
+/backend/var/
