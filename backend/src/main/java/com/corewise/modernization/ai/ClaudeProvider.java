@@ -3,10 +3,8 @@ package com.corewise.modernization.ai;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 import java.util.Map;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
@@ -15,8 +13,6 @@ import org.springframework.web.client.RestClient;
  * Talks to Anthropic's Claude. Active when app.ai.provider is "claude" (the default).
  * It only knows how to make the call and read the reply; retries live in AiClient.
  */
-@Component
-@ConditionalOnProperty(name = "app.ai.provider", havingValue = "claude", matchIfMissing = true)
 public class ClaudeProvider implements AiProvider {
 
     private final AiProperties.Vendor config;
