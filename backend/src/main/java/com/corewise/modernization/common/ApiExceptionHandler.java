@@ -1,5 +1,6 @@
 package com.corewise.modernization.common;
 
+import com.corewise.modernization.ai.AiException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
@@ -74,6 +75,13 @@ public class ApiExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
         return build(HttpStatus.FORBIDDEN, "forbidden", "You do not have access to do that.", request);
+    }
+
+    @ExceptionHandler(AiException.class)
+    public ResponseEntity<ApiError> handleAi(AiException ex, HttpServletRequest request) {
+        // The AI is a service we do not control, so a failure there is a bad gateway,
+        // not our internal error. The message is already plain enough to show.
+        return build(HttpStatus.BAD_GATEWAY, "ai_error", ex.getMessage(), request);
     }
 
     @ExceptionHandler(Exception.class)
