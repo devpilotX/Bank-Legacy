@@ -196,3 +196,47 @@ body {
 .row--clickable {
   cursor: pointer;
 }
+
+
+// Vertical spacing for fields inside a modal form.
+.form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+// A row of filter controls above a table.
+.filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-block-end: 1rem;
+}
+
+.filters .cds--select {
+  min-inline-size: 12rem;
+}
+
+
+// The project detail page uses the full width for side-by-side work.
+.page--wide {
+  max-inline-size: none;
+}
+
+.project-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-block-end: 1rem;
+}
+
+.project-head__stage .cds--select {
+  min-inline-size: 12rem;
+}
+
+.tab-content {
+  margin-block-start: 1.5rem;
+}

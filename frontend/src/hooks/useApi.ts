@@ -15,7 +15,7 @@ export type AsyncState<T> = {
  * with LoadingState and ErrorState so every data screen behaves the same way: show a
  * loader, then the data, or a calm message with a way to try again.
  */
-export function useApi<T>(loader: () => Promise<T>): AsyncState<T> {
+export function useApi<T>(loader: () => Promise<T>, deps: ReadonlyArray<unknown> = []): AsyncState<T> {
   const [status, setStatus] = useState<AsyncStatus>('loading');
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -44,9 +44,10 @@ export function useApi<T>(loader: () => Promise<T>): AsyncState<T> {
     return () => {
       active = false;
     };
-    // We re-run only when reload() bumps the attempt counter.
+    // We re-run when reload() bumps the attempt counter, or when a caller-supplied
+    // dependency (such as a route id) changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attempt]);
+  }, [attempt, ...deps]);
 
   return { status, data, error, reload };
 }
