@@ -1,11 +1,14 @@
 package com.corewise.modernization.web;
 
+import com.corewise.modernization.security.RestAccessDeniedHandler;
+import com.corewise.modernization.security.RestAuthenticationEntryPoint;
 import com.corewise.modernization.security.SecurityConfig;
 import com.corewise.modernization.service.AppInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -19,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * This is a web-only test, so it does not need a database.
  */
 @WebMvcTest(HealthController.class)
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, RestAuthenticationEntryPoint.class, RestAccessDeniedHandler.class})
+@TestPropertySource(properties = "app.security.jwt.secret=test-secret-please-change-0123456789abcdef")
 class HealthControllerTest {
 
     @Autowired
