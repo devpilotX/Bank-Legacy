@@ -1,12 +1,35 @@
 # Frontend
 
-This is where the React and IBM Carbon app will live. We set it up in the next step.
+The screens our engineers use. React with TypeScript, built with Vite, and IBM Carbon for
+the components and styling.
 
-It will use:
+## Run it
 
-- React with TypeScript
-- IBM Carbon (`@carbon/react`) for components, with Sass the way Carbon expects
-- Carbon's own icon set (`@carbon/icons-react`)
+From Git Bash, in this folder:
 
-The internal tool defaults to Carbon's dark theme (g100), since engineers stare at it for
-hours, and the theme can be switched.
+```bash
+npm install
+npm run dev
+```
+
+Then open the address Vite prints, usually http://localhost:5173.
+
+The dev server sends `/health` and `/api` calls to the backend on port 8080, so start the
+backend too (see the backend README) to watch the status turn green.
+
+## Build it
+
+```bash
+npm run build
+```
+
+This type-checks the code and writes a production build to `dist/`.
+
+## Notes
+
+- The tool defaults to Carbon's dark theme (g100), since engineers stare at it for hours.
+  Use the toggle in the header to switch to the light theme. Your choice is remembered.
+- Components and icons come from `@carbon/react` and `@carbon/icons-react`. We lean on
+  Carbon instead of hand rolling UI it already does well.
+- The product name shows as "Corewise Modernization" for now. It is a working name and
+  lives in `src/branding.ts`, so it is a one line change if we pick something else.

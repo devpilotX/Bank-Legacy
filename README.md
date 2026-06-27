@@ -63,7 +63,17 @@ You should see something like:
 
 ## Run the frontend
 
-Coming in the next step.
+From Git Bash, in the repo root:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open the address Vite prints, usually http://localhost:5173. The dev server forwards
+`/health` and `/api` calls to the backend on port 8080, so run the backend too to see the
+status turn green. There is more detail in `frontend/README.md`.
 
 ## A note on secrets
 

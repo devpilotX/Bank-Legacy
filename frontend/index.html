@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Corewise Modernization</title>
+    <script>
+      // Apply the saved theme before the app paints, so there is no flash of the
+      // wrong colors. The dark theme (g100) is the default and lives in CSS, so we
+      // only need to flip the attribute when the saved choice is the light theme.
+      try {
+        if (localStorage.getItem('modernization.theme') === 'g10') {
+          document.documentElement.setAttribute('data-carbon-theme', 'g10');
+        }
+      } catch (e) {
+        /* localStorage can be blocked; the dark default is fine if so. */
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
