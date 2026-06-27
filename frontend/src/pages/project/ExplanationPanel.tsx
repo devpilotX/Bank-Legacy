@@ -69,8 +69,8 @@ export function ExplanationPanel({ file }: { file: SourceFile }) {
     <div>
       <h3 className="section-title">AI explanation</h3>
       <p className="page__muted">
-        Ask the AI to explain this file, or a range of lines. Read it, fix anything that is off, then
-        approve it. Nothing here is trusted until a person approves it.
+        Ask the AI to explain this file, or a range of lines. Read it, fix anything that is off, then approve
+        it. Nothing here is trusted until a person approves it.
       </p>
 
       <div className="explain__ask">
@@ -108,8 +108,9 @@ export function ExplanationPanel({ file }: { file: SourceFile }) {
         <ErrorState message={state.error ?? 'We could not load the explanations.'} onRetry={state.reload} />
       )}
 
-      {state.status === 'ok' && state.data && (
-        state.data.length === 0 ? (
+      {state.status === 'ok' &&
+        state.data &&
+        (state.data.length === 0 ? (
           <p className="page__muted">No explanations yet. Ask the AI to write the first one.</p>
         ) : (
           <div className="explain__list">
@@ -168,8 +169,7 @@ export function ExplanationPanel({ file }: { file: SourceFile }) {
               </Tile>
             ))}
           </div>
-        )
-      )}
+        ))}
     </div>
   );
 }

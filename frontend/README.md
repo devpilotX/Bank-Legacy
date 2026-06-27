@@ -34,7 +34,6 @@ This type-checks the code and writes a production build to `dist/`.
 - The product name shows as "Corewise Modernization" for now. It is a working name and
   lives in `src/branding.ts`, so it is a one line change if we pick something else.
 
-
 ## Signing in
 
 Start the backend too (see the backend README), then open the dev server and sign in. For local

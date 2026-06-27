@@ -78,7 +78,11 @@ export function ProjectDetailPage() {
                 onChange={(event: ChangeEvent<HTMLSelectElement>) => changeStage(event.target.value)}
               >
                 {PROJECT_STAGES.map((stage) => (
-                  <SelectItem key={stage} value={stage} text={stage.charAt(0).toUpperCase() + stage.slice(1)} />
+                  <SelectItem
+                    key={stage}
+                    value={stage}
+                    text={stage.charAt(0).toUpperCase() + stage.slice(1)}
+                  />
                 ))}
               </Select>
             </div>

@@ -3,14 +3,7 @@ import type { ReactNode } from 'react';
 import { fetchCurrentUser, login as loginRequest } from '../api/auth';
 import { ApiClientError } from '../api/types';
 import type { ApiUser } from '../api/types';
-import {
-  clearStoredUser,
-  clearToken,
-  getStoredUser,
-  getToken,
-  setStoredUser,
-  setToken,
-} from './session';
+import { clearStoredUser, clearToken, getStoredUser, getToken, setStoredUser, setToken } from './session';
 
 type AuthContextValue = {
   isAuthenticated: boolean;

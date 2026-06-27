@@ -78,16 +78,33 @@ export function CodeTab() {
     <div>
       <div className="code-tab__bar">
         <input ref={fileInput} type="file" hidden onChange={(event) => handlePick(event, false)} />
-        <input ref={zipInput} type="file" accept=".zip" hidden onChange={(event) => handlePick(event, true)} />
+        <input
+          ref={zipInput}
+          type="file"
+          accept=".zip"
+          hidden
+          onChange={(event) => handlePick(event, true)}
+        />
         <Button renderIcon={Upload} onClick={() => fileInput.current?.click()} disabled={uploading}>
           Upload a file
         </Button>
-        <Button kind="tertiary" renderIcon={Archive} onClick={() => zipInput.current?.click()} disabled={uploading}>
+        <Button
+          kind="tertiary"
+          renderIcon={Archive}
+          onClick={() => zipInput.current?.click()}
+          disabled={uploading}
+        >
           Upload a zip
         </Button>
         {uploading && (
           <div className="code-tab__progress">
-            <ProgressBar label="Uploading" helperText={`${progress}%`} value={progress} max={100} size="small" />
+            <ProgressBar
+              label="Uploading"
+              helperText={`${progress}%`}
+              value={progress}
+              max={100}
+              size="small"
+            />
           </div>
         )}
       </div>
@@ -104,11 +121,15 @@ export function CodeTab() {
 
       {filesState.status === 'loading' && <LoadingState label="Loading files..." />}
       {filesState.status === 'error' && (
-        <ErrorState message={filesState.error ?? 'We could not load the files.'} onRetry={filesState.reload} />
+        <ErrorState
+          message={filesState.error ?? 'We could not load the files.'}
+          onRetry={filesState.reload}
+        />
       )}
 
-      {filesState.status === 'ok' && filesState.data && (
-        filesState.data.length === 0 ? (
+      {filesState.status === 'ok' &&
+        filesState.data &&
+        (filesState.data.length === 0 ? (
           <p className="page__muted">No files yet. Upload some old code to begin.</p>
         ) : (
           <div className="code-tab__layout">
@@ -124,11 +145,7 @@ export function CodeTab() {
               </TableHead>
               <TableBody>
                 {filesState.data.map((file) => (
-                  <TableRow
-                    key={file.id}
-                    className="row--clickable"
-                    onClick={() => setSelectedId(file.id)}
-                  >
+                  <TableRow key={file.id} className="row--clickable" onClick={() => setSelectedId(file.id)}>
                     <TableCell>{file.filename}</TableCell>
                     <TableCell>{file.language}</TableCell>
                     <TableCell>{formatBytes(file.byteSize)}</TableCell>
@@ -153,8 +170,7 @@ export function CodeTab() {
               <p className="page__muted">Pick a file to read it and see its explanation.</p>
             )}
           </div>
-        )
-      )}
+        ))}
     </div>
   );
 }

@@ -65,8 +65,8 @@ export function ModernizeTab() {
         {state.status === 'error' && (
           <ErrorState message={state.error ?? 'We could not load the units.'} onRetry={state.reload} />
         )}
-        {state.status === 'ok' && (
-          units.length === 0 ? (
+        {state.status === 'ok' &&
+          (units.length === 0 ? (
             <p className="page__muted">
               No units yet. Create one from a small piece of old code to start rewriting.
             </p>
@@ -85,8 +85,7 @@ export function ModernizeTab() {
                 </li>
               ))}
             </ul>
-          )
-        )}
+          ))}
       </div>
 
       <div className="modernize__work">
@@ -108,7 +107,13 @@ export function ModernizeTab() {
       >
         <div className="form-stack">
           {error && (
-            <InlineNotification kind="error" lowContrast hideCloseButton title="Could not create" subtitle={error} />
+            <InlineNotification
+              kind="error"
+              lowContrast
+              hideCloseButton
+              title="Could not create"
+              subtitle={error}
+            />
           )}
           <TextInput
             id="new-unit-title"

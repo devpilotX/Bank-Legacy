@@ -1,16 +1,7 @@
 import { Tag } from '@carbon/react';
 
 type TagType =
-  | 'red'
-  | 'magenta'
-  | 'purple'
-  | 'blue'
-  | 'cyan'
-  | 'teal'
-  | 'green'
-  | 'gray'
-  | 'cool-gray'
-  | 'warm-gray';
+  'red' | 'magenta' | 'purple' | 'blue' | 'cyan' | 'teal' | 'green' | 'gray' | 'cool-gray' | 'warm-gray';
 
 // One place that decides the color for every status we show, so a stage or a state
 // looks the same on every screen.

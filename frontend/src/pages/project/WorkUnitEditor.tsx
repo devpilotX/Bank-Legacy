@@ -101,7 +101,9 @@ export function WorkUnitEditor({ unit, onChanged }: { unit: WorkUnit; onChanged:
             <Button
               size="sm"
               disabled={busy}
-              onClick={() => run(() => aiDraftTranslation(unit.id), 'The AI could not draft a translation right now.')}
+              onClick={() =>
+                run(() => aiDraftTranslation(unit.id), 'The AI could not draft a translation right now.')
+              }
             >
               Ask the AI for a first draft
             </Button>

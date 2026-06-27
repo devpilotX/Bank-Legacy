@@ -27,8 +27,8 @@ export function VerifyTab() {
         <ErrorState message={state.error ?? 'We could not load the units.'} onRetry={state.reload} />
       )}
 
-      {state.status === 'ok' && (
-        state.data && state.data.length > 0 ? (
+      {state.status === 'ok' &&
+        (state.data && state.data.length > 0 ? (
           <>
             <div className="filters">
               <Select
@@ -46,8 +46,7 @@ export function VerifyTab() {
           </>
         ) : (
           <p className="page__muted">No units yet. Create a unit in Modernize first, then verify it here.</p>
-        )
-      )}
+        ))}
     </div>
   );
 }

@@ -68,13 +68,7 @@ export function DependencyGraph({ nodes, edges, selectedId, onSelect }: Dependen
         const selected = node.id === selectedId;
         const onLeft = point.x < centerX;
         return (
-          <g
-            key={node.id}
-            className="dep-node"
-            onClick={() => onSelect(node.id)}
-            role="button"
-            tabIndex={0}
-          >
+          <g key={node.id} className="dep-node" onClick={() => onSelect(node.id)} role="button" tabIndex={0}>
             <circle
               cx={point.x}
               cy={point.y}

@@ -84,7 +84,11 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
     setSaving(true);
     setError(null);
     try {
-      await addCase(unitId, { name: name.trim(), input: input.trim() || undefined, expectedOutput: expected });
+      await addCase(unitId, {
+        name: name.trim(),
+        input: input.trim() || undefined,
+        expectedOutput: expected,
+      });
       setOpen(false);
       state.reload();
     } catch (caught) {
@@ -121,9 +125,15 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
 
       {data && (
         <p className="verify-summary">
-          <Tag type="green" size="sm">{data.passed} passed</Tag>
-          <Tag type="red" size="sm">{data.failed} failed</Tag>
-          <Tag type="cool-gray" size="sm">{data.notRun} not run</Tag>
+          <Tag type="green" size="sm">
+            {data.passed} passed
+          </Tag>
+          <Tag type="red" size="sm">
+            {data.failed} failed
+          </Tag>
+          <Tag type="cool-gray" size="sm">
+            {data.notRun} not run
+          </Tag>
           <span className="page__muted">{data.total} case(s)</span>
         </p>
       )}
@@ -143,8 +153,9 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
         <ErrorState message={state.error ?? 'We could not load the cases.'} onRetry={state.reload} />
       )}
 
-      {state.status === 'ok' && data && (
-        data.cases.length === 0 ? (
+      {state.status === 'ok' &&
+        data &&
+        (data.cases.length === 0 ? (
           <p className="page__muted">No cases yet. Add one, or let the AI draft some for you to confirm.</p>
         ) : (
           <div className="explain__list">
@@ -155,9 +166,13 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
                   <div className="explain__item-head">
                     <strong>{item.name}</strong>
                     {suggested ? (
-                      <Tag type="blue" size="sm">AI draft, confirm to use</Tag>
+                      <Tag type="blue" size="sm">
+                        AI draft, confirm to use
+                      </Tag>
                     ) : (
-                      <Tag type="cool-gray" size="sm">Ready</Tag>
+                      <Tag type="cool-gray" size="sm">
+                        Ready
+                      </Tag>
                     )}
                     {item.origin === 'ai' && !suggested ? (
                       <span className="page__muted">from the AI, confirmed by a person</span>
@@ -209,8 +224,7 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
               );
             })}
           </div>
-        )
-      )}
+        ))}
 
       <Modal
         open={open}
@@ -223,7 +237,13 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
       >
         <div className="form-stack">
           {error && (
-            <InlineNotification kind="error" lowContrast hideCloseButton title="Could not add" subtitle={error} />
+            <InlineNotification
+              kind="error"
+              lowContrast
+              hideCloseButton
+              title="Could not add"
+              subtitle={error}
+            />
           )}
           <TextInput
             id="case-name"

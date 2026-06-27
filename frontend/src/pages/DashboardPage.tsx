@@ -1,12 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  Tile,
-} from '@carbon/react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tile } from '@carbon/react';
 import { useNavigate } from 'react-router-dom';
 import { listClients } from '../api/clients';
 import { listFiles } from '../api/files';
@@ -90,9 +82,7 @@ export function DashboardPage() {
           </div>
 
           {state.data.rows.length === 0 ? (
-            <p className="page__muted">
-              No projects yet. Add a client and start a project to see it here.
-            </p>
+            <p className="page__muted">No projects yet. Add a client and start a project to see it here.</p>
           ) : (
             <Table aria-label="Your projects" size="lg">
               <TableHead>

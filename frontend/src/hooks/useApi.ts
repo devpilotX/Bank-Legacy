@@ -38,7 +38,9 @@ export function useApi<T>(loader: () => Promise<T>, deps: ReadonlyArray<unknown>
         if (!active) {
           return;
         }
-        setError(caught instanceof ApiClientError ? caught.message : 'Something went wrong. Please try again.');
+        setError(
+          caught instanceof ApiClientError ? caught.message : 'Something went wrong. Please try again.',
+        );
         setStatus('error');
       });
     return () => {

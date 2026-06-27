@@ -4,10 +4,8 @@ import type { VerificationCase, VerificationResults } from './types';
 export const listCases = (workUnitId: number) =>
   api.get<VerificationCase[]>(`/api/work-units/${workUnitId}/verification-cases`);
 
-export const addCase = (
-  workUnitId: number,
-  body: { name: string; input?: string; expectedOutput: string },
-) => api.post<VerificationCase>(`/api/work-units/${workUnitId}/verification-cases`, body);
+export const addCase = (workUnitId: number, body: { name: string; input?: string; expectedOutput: string }) =>
+  api.post<VerificationCase>(`/api/work-units/${workUnitId}/verification-cases`, body);
 
 export const draftCases = (workUnitId: number) =>
   api.post<VerificationCase[]>(`/api/work-units/${workUnitId}/verification-cases/ai-draft`);

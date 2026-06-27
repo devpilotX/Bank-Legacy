@@ -75,7 +75,9 @@ export function ClientsPage() {
       setOpen(false);
       state.reload();
     } catch (caught) {
-      setError(caught instanceof ApiClientError ? caught.message : 'We could not save the client. Please try again.');
+      setError(
+        caught instanceof ApiClientError ? caught.message : 'We could not save the client. Please try again.',
+      );
     } finally {
       setSaving(false);
     }
@@ -96,8 +98,9 @@ export function ClientsPage() {
         <ErrorState message={state.error ?? 'We could not load the clients.'} onRetry={state.reload} />
       )}
 
-      {state.status === 'ok' && state.data && (
-        state.data.length === 0 ? (
+      {state.status === 'ok' &&
+        state.data &&
+        (state.data.length === 0 ? (
           <p className="page__muted">No clients yet.</p>
         ) : (
           <Table aria-label="Clients">
@@ -128,8 +131,7 @@ export function ClientsPage() {
               ))}
             </TableBody>
           </Table>
-        )
-      )}
+        ))}
 
       <Modal
         open={open}
@@ -142,7 +144,13 @@ export function ClientsPage() {
       >
         <div className="form-stack">
           {error && (
-            <InlineNotification kind="error" lowContrast hideCloseButton title="Could not save" subtitle={error} />
+            <InlineNotification
+              kind="error"
+              lowContrast
+              hideCloseButton
+              title="Could not save"
+              subtitle={error}
+            />
           )}
           <TextInput
             id="client-name"

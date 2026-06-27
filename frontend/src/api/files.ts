@@ -4,8 +4,7 @@ import { api } from './client';
 import { ApiClientError } from './types';
 import type { SourceFile } from './types';
 
-export const listFiles = (projectId: number) =>
-  api.get<SourceFile[]>(`/api/projects/${projectId}/files`);
+export const listFiles = (projectId: number) => api.get<SourceFile[]>(`/api/projects/${projectId}/files`);
 
 export const getFile = (id: number) => api.get<SourceFile>(`/api/files/${id}`);
 

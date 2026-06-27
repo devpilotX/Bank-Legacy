@@ -46,7 +46,7 @@ export function MapTab() {
   const nodes = state.data?.nodes ?? [];
   const edges = state.data?.edges ?? [];
   const nodeById = new Map(nodes.map((node) => [node.id, node]));
-  const selectedNode = selectedId != null ? nodeById.get(selectedId) ?? null : null;
+  const selectedNode = selectedId != null ? (nodeById.get(selectedId) ?? null) : null;
   const suggested = edges.filter((edge) => edge.origin === 'ai' && edge.status === 'suggested');
 
   return (
@@ -78,8 +78,8 @@ export function MapTab() {
         <ErrorState message={state.error ?? 'We could not load the map.'} onRetry={state.reload} />
       )}
 
-      {state.status === 'ok' && (
-        nodes.length === 0 ? (
+      {state.status === 'ok' &&
+        (nodes.length === 0 ? (
           <p className="page__muted">No map yet. Upload some code, then build the map.</p>
         ) : (
           <div className="map-layout">
@@ -108,7 +108,9 @@ export function MapTab() {
                       <Button
                         size="sm"
                         kind="tertiary"
-                        onClick={() => navigate(`/projects/${project.id}/code?file=${selectedNode.sourceFileId}`)}
+                        onClick={() =>
+                          navigate(`/projects/${project.id}/code?file=${selectedNode.sourceFileId}`)
+                        }
                       >
                         View in Code
                       </Button>
@@ -132,8 +134,8 @@ export function MapTab() {
                     {suggested.map((edge) => (
                       <div key={edge.id} className="map-suggestion">
                         <p>
-                          {nodeById.get(edge.fromNodeId)?.name} <span className="page__muted">{edge.kind}</span>{' '}
-                          {nodeById.get(edge.toNodeId)?.name}
+                          {nodeById.get(edge.fromNodeId)?.name}{' '}
+                          <span className="page__muted">{edge.kind}</span> {nodeById.get(edge.toNodeId)?.name}
                         </p>
                         {edge.detail ? <p className="page__muted">{edge.detail}</p> : null}
                         <div className="explain__actions">
@@ -151,8 +153,7 @@ export function MapTab() {
               </Tile>
             </div>
           </div>
-        )
-      )}
+        ))}
     </div>
   );
 }

@@ -87,7 +87,11 @@ export function ProjectsPage() {
       setOpen(false);
       navigate(`/projects/${created.id}`);
     } catch (caught) {
-      setError(caught instanceof ApiClientError ? caught.message : 'We could not start the project. Please try again.');
+      setError(
+        caught instanceof ApiClientError
+          ? caught.message
+          : 'We could not start the project. Please try again.',
+      );
     } finally {
       setSaving(false);
     }
@@ -185,7 +189,13 @@ export function ProjectsPage() {
       >
         <div className="form-stack">
           {error && (
-            <InlineNotification kind="error" lowContrast hideCloseButton title="Could not start" subtitle={error} />
+            <InlineNotification
+              kind="error"
+              lowContrast
+              hideCloseButton
+              title="Could not start"
+              subtitle={error}
+            />
           )}
           <Select
             id="project-client"

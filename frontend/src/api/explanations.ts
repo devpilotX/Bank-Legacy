@@ -10,5 +10,4 @@ export const explainFile = (fileId: number, body: { startLine?: number; endLine?
 export const editExplanation = (id: number, content: string) =>
   api.put<Explanation>(`/api/explanations/${id}`, { content });
 
-export const approveExplanation = (id: number) =>
-  api.post<Explanation>(`/api/explanations/${id}/approve`);
+export const approveExplanation = (id: number) => api.post<Explanation>(`/api/explanations/${id}/approve`);

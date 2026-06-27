@@ -70,8 +70,7 @@ export function ReportTab() {
     .filter((item) => item.explanations.length === 0)
     .map((item) => item.file);
 
-  const nothingToFlag =
-    heavilyUsed.length === 0 && notDocumented.length === 0 && suggestedEdges.length === 0;
+  const nothingToFlag = heavilyUsed.length === 0 && notDocumented.length === 0 && suggestedEdges.length === 0;
 
   return (
     <div className="report">
@@ -92,10 +91,9 @@ export function ReportTab() {
         <section>
           <h2>Overview</h2>
           <p>
-            We took in {data.files.length} file(s) for this system. {documentedFiles.length} of them
-            have a plain-English explanation that one of our engineers checked and approved. The map
-            shows {data.map.nodes.length} part(s) and {confirmedEdges.length} confirmed connection(s)
-            between them.
+            We took in {data.files.length} file(s) for this system. {documentedFiles.length} of them have a
+            plain-English explanation that one of our engineers checked and approved. The map shows{' '}
+            {data.map.nodes.length} part(s) and {confirmedEdges.length} confirmed connection(s) between them.
           </p>
         </section>
 
@@ -103,8 +101,8 @@ export function ReportTab() {
           <h2>What the system does</h2>
           {documentedFiles.length === 0 ? (
             <p>
-              No approved explanations yet. Once an engineer approves explanations in the Code
-              section, they show up here in plain words.
+              No approved explanations yet. Once an engineer approves explanations in the Code section, they
+              show up here in plain words.
             </p>
           ) : (
             documentedFiles.map((item) => (
@@ -180,7 +178,9 @@ export function ReportTab() {
           {suggestedEdges.length > 0 && (
             <div className="report__block">
               <h3>Connections to confirm</h3>
-              <p>The AI suggested these links, but a person has not confirmed them, so do not rely on them yet.</p>
+              <p>
+                The AI suggested these links, but a person has not confirmed them, so do not rely on them yet.
+              </p>
               <ul>
                 {suggestedEdges.map((edge) => (
                   <li key={edge.id}>

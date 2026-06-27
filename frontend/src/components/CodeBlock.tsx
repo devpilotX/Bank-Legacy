@@ -7,7 +7,6 @@ export function CodeBlock({ text }: { text: string }) {
       <code>
         {lines.map((line, index) => (
           // A static render of file lines, so the index key is fine here.
-          // eslint-disable-next-line react/no-array-index-key
           <span className="code-view__line" key={index}>
             <span className="code-view__num">{index + 1}</span>
             <span className="code-view__text">{line === '' ? ' ' : line}</span>
