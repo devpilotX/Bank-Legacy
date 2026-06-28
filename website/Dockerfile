@@ -3,7 +3,8 @@
 
 FROM node:24-alpine AS build
 WORKDIR /app
-COPY package.json package-lock.json ./
+# Copy .npmrc too, so npm ci uses the same settings (legacy-peer-deps) as local installs.
+COPY package.json package-lock.json .npmrc ./
 RUN npm ci
 COPY . .
 RUN npm run build
