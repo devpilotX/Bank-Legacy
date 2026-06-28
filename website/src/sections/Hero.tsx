@@ -1,11 +1,20 @@
+import { lazy, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { HeroVisualStatic } from './HeroVisualStatic';
+import { useEnable3D } from '@/lib/motion';
+
+// The 3D scene is split into its own chunk and only fetched when we decide to show it,
+// so the page shows text right away and the heavy code never reaches phones, low-power
+// devices, or reduced-motion visitors.
+const HeroScene = lazy(() => import('./HeroScene'));
 
 // The hero: the one strong moment at the top. The text leads, and a calm visual sits
-// beside it. The 3D version of this visual is added next; for now the static panel
-// stands in, and it stays as the fallback for phones, low-power devices, and reduced
-// motion, so the page always looks complete even when the 3D never loads.
+// beside it. On a capable wide screen with motion allowed, the visual is a slow 3D
+// moment. Everywhere else it is the static panel, which is also what shows while the 3D
+// loads, so the hero always looks complete.
 export function Hero() {
+  const show3D = useEnable3D();
+
   return (
     <section className="px-4 pt-12 pb-20 sm:px-6 sm:pt-20 sm:pb-28">
       <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -32,7 +41,13 @@ export function Hero() {
         </div>
 
         <div className="lg:pl-4">
-          <HeroVisualStatic />
+          {show3D ? (
+            <Suspense fallback={<HeroVisualStatic />}>
+              <HeroScene />
+            </Suspense>
+          ) : (
+            <HeroVisualStatic />
+          )}
         </div>
       </div>
     </section>

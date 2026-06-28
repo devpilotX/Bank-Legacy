@@ -20,5 +20,14 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
+  {
+    // The shadcn/ui primitives are vendored. They export a component together with its
+    // variants from one file on purpose, which the fast-refresh rule warns about. That
+    // warning does not apply to these files.
+    files: ['src/components/ui/**/*.{ts,tsx}'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
   prettier,
 );
