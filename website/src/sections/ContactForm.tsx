@@ -6,35 +6,35 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CONTACT_EMAIL, CONTACT_ENDPOINT } from '@/config';
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { contactProblem, isBotSubmission } from '@/lib/contact';
 
 // The contact form: name, bank, email, and a short message. It checks the fields, then
 // sends the message to the endpoint from config. If no endpoint is set yet, it keeps the
 // message in the browser so the flow still works while we build. It shows a plain
-// thank-you when it sends and a calm message if something goes wrong.
+// thank-you when it sends, and a calm message if something goes wrong. A hidden honeypot
+// field quietly catches bots.
 export function ContactForm() {
   const [name, setName] = useState('');
   const [bank, setBank] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  // The honeypot. Real people never see or fill this in.
+  const [company, setCompany] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
-  function firstProblem(): string | null {
-    if (!name.trim() || !bank.trim() || !email.trim() || !message.trim()) {
-      return 'Please fill in every field.';
-    }
-    if (!EMAIL_PATTERN.test(email.trim())) {
-      return 'Please enter an email we can reply to.';
-    }
-    return null;
-  }
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const problem = firstProblem();
+
+    // If the hidden field was filled, this is almost certainly a bot. Show the same
+    // thank-you so it cannot tell, but do not send anything.
+    if (isBotSubmission(company)) {
+      setSent(true);
+      return;
+    }
+
+    const problem = contactProblem({ name, bank, email, message });
     if (problem) {
       setError(problem);
       return;
@@ -165,6 +165,22 @@ export function ContactForm() {
             rows={5}
             value={message}
             onChange={(event) => setMessage(event.target.value)}
+          />
+        </div>
+
+        {/* Honeypot: hidden from people, left empty by them, but often filled by bots.
+            It is pulled off-screen and hidden from assistive tech, and skipped by the
+            keyboard. */}
+        <div className="absolute left-[-9999px]" aria-hidden="true">
+          <label htmlFor="contact-company">Company (leave this empty)</label>
+          <input
+            id="contact-company"
+            name="company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={company}
+            onChange={(event) => setCompany(event.target.value)}
           />
         </div>
 

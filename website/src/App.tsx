@@ -19,8 +19,17 @@ export function App() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      {/* For keyboard users: jump straight past the nav to the content. Hidden until
+          it is focused. */}
+      <a
+        href="#top"
+        onClick={() => document.getElementById('top')?.focus({ preventScroll: true })}
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-4 focus:z-[60] focus:rounded-md focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:shadow focus:ring-2 focus:ring-ring focus:outline-none"
+      >
+        Skip to content
+      </a>
       <SiteNav />
-      <main id="top" className="flex-1 pt-16">
+      <main id="top" tabIndex={-1} className="flex-1 pt-16 outline-none">
         <Hero />
         <Problem />
         <WhatWeDo />
