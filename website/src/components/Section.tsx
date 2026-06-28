@@ -13,7 +13,10 @@ type SectionProps = {
 export function Section({ id, className, children }: SectionProps) {
   return (
     <section id={id} className={cn('scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28', className)}>
-      <div className="mx-auto max-w-5xl">{children}</div>
+      {/* data-reveal marks this block for the one shared fade+rise reveal. */}
+      <div className="mx-auto max-w-5xl" data-reveal>
+        {children}
+      </div>
     </section>
   );
 }
