@@ -16,4 +16,10 @@ export default defineConfig({
   server: {
     port: 5174,
   },
+  build: {
+    // The only large chunk is the 3D hero (three.js), and it is lazy-loaded, so it never
+    // lands on the first paint. Raise the warning limit a little so the build output stays
+    // clean and honest about that one intentional chunk.
+    chunkSizeWarningLimit: 1000,
+  },
 });
