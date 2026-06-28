@@ -21,9 +21,21 @@ website/    The public site: a separate React + IBM Carbon app
 docs/       Notes and the running list of decisions
 ```
 
-The `carbon-main` folder is the IBM Carbon source we downloaded for reference. It is not part
-of our app, and Git ignores it. The frontend uses the official `@carbon/react` package as the
-real dependency instead.
+A few top-level folders are third-party source we downloaded only for reference, and Git
+ignores all of them: `carbon-main` (IBM Carbon), `GSAP-master`, `lenis-main`,
+`react-three-fiber-master`, and `ui-main`. They are not part of our app. Where we actually
+use one of these libraries we pull it in as a normal package instead — for example the
+frontend and website depend on the official `@carbon/react` rather than the `carbon-main`
+source.
+
+## Get the code
+
+The repository lives at https://github.com/devpilotX/Bank-Legacy. To clone it:
+
+```bash
+git clone https://github.com/devpilotX/Bank-Legacy.git
+cd Bank-Legacy
+```
 
 ## What you need
 

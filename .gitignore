@@ -53,8 +53,16 @@ logs/
 Thumbs.db
 desktop.ini
 
-# ---- IBM Carbon source, downloaded for reference only ----
+# ---- Third-party source downloaded for reference only (not part of the app) ----
 /carbon-main/
+/GSAP-master/
+/lenis-main/
+/react-three-fiber-master/
+/ui-main/
+
+
+# ---- Local tooling config (may contain tokens, never commit) ----
+/.kiro/
 
 
 # ---- Uploaded source files stored on disk (local dev) ----
