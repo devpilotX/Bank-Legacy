@@ -1,13 +1,13 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 
-// IBM Plex Sans is Carbon's typeface, self-hosted so there is no outside CDN.
+// IBM Plex Sans is the body face, self-hosted so there is no outside font CDN.
 import '@fontsource/ibm-plex-sans/300.css';
 import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
 import '@fontsource/ibm-plex-sans/600.css';
 
-import './index.scss';
+import './index.css';
 import { App } from './App';
 
 const container = document.getElementById('root');
@@ -17,8 +17,6 @@ if (!container) {
 
 createRoot(container).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <App />
   </StrictMode>,
 );

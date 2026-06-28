@@ -1,10 +1,18 @@
+import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 // The public site is its own app. It runs on a different port from the internal
-// tool so both can run at once during development, and it shares no code with it.
+// tool so both can run at once in development, and it shares no code with it.
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      // "@/..." points at the src folder. shadcn/ui components rely on this.
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
   server: {
     port: 5174,
   },

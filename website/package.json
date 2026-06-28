@@ -13,14 +13,14 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@carbon/react": "^1.110.0",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "react-router-dom": "^7.18.0"
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@tailwindcss/vite": "^4.3.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
@@ -29,7 +29,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "prettier": "^3.4.2",
-    "sass": "^1.101.0",
+    "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.20.0",
     "vite": "^8.1.0"

@@ -1,29 +1,11 @@
-import { Route, Routes } from 'react-router-dom';
-import { ScrollToTop } from './components/ScrollToTop';
-import { SiteFooter } from './components/SiteFooter';
-import { SiteHeader } from './components/SiteHeader';
-import { ContactPage } from './pages/ContactPage';
-import { HomePage } from './pages/HomePage';
-import { WhatWeDoPage } from './pages/WhatWeDoPage';
-import { WhoWeHelpPage } from './pages/WhoWeHelpPage';
-import { WhyUsPage } from './pages/WhyUsPage';
-
+// Temporary placeholder so we can confirm Tailwind is wired up correctly.
+// This gets replaced by the real site once the base is proven solid.
 export function App() {
   return (
-    <div className="site">
-      <ScrollToTop />
-      <SiteHeader />
-      <main className="site-main">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/what-we-do" element={<WhatWeDoPage />} />
-          <Route path="/who-we-help" element={<WhoWeHelpPage />} />
-          <Route path="/why-us" element={<WhyUsPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="*" element={<HomePage />} />
-        </Routes>
-      </main>
-      <SiteFooter />
+    <div className="grid min-h-screen place-items-center bg-slate-50">
+      <p className="rounded-lg bg-slate-900 px-6 py-3 text-lg font-semibold text-white">
+        Tailwind is working.
+      </p>
     </div>
   );
 }
