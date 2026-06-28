@@ -142,3 +142,43 @@ A plain log of the choices we made while building, so anyone picking this up lat
   launch. We chose this so the site stays a simple static app with nothing wired to the internal tool.
 - **Five short pages, plain writing.** Home, What we do, Who we help, Why us, Contact. The words are
   the point here, so they are written plainly and honestly, in the same voice as everywhere else.
+
+
+
+## 2026-06-29, public website rebuilt on a new stack
+
+- **The public site moved off Carbon to its own modern stack.** It is still its own app in
+  `website/`, separate from the internal tool, and still shares no code with it. The internal
+  tool stays on React and Carbon and was not touched. We changed only the public site, and only
+  its look and its tech, not its plain-spoken words.
+- **The stack is React and TypeScript on Vite, Tailwind CSS, and shadcn/ui**, with GSAP and
+  ScrollTrigger for reveals, Lenis for smooth scrolling, and React Three Fiber with drei for one
+  small 3D moment in the hero. We installed current versions with npm and kept the four
+  downloaded library folders as reference only. Git ignores them.
+- **shadcn was set up by hand.** Its CLI is interactive and stalls in this non-interactive shell,
+  the same problem we had with the Vite scaffolder. So we wrote `components.json`, the `cn`
+  helper, and the component files ourselves. The result is what the CLI would have produced.
+- **One page, six sections.** Hero, the problem, what we do, who we help, why us, and contact, in
+  that order, with a fixed top nav that jumps to each. The nav links are built from one shared
+  list, so they cannot drift out of sync with the sections.
+- **Calm colors and type.** Light theme only. Slate grays, one deep blue as the single brand
+  color used lightly, and plenty of white space. IBM Plex Sans for text and IBM Plex Mono for the
+  small code accents, both self-hosted, so there is no outside font CDN. Colors are CSS variables.
+- **The 3D is the one strong moment, kept tasteful.** It echoes the logo: an outlined old block
+  giving way to a solid modern one, moving slowly and quietly. It loads in its own chunk, and only
+  on a wide screen, on a capable device, with reduced motion off. The first paint never waits on it.
+- **One static fallback does double duty.** The same calm panel, COBOL becoming Java, shows on
+  phones, low-power devices, and for reduced motion, and it is also what shows while the 3D chunk
+  loads. The page looks complete even if the 3D never runs.
+- **Reduced motion is fully respected.** One switch turns off smooth scroll, the reveals, and the
+  3D together, and shows the static version.
+- **The contact form stays config-driven.** It posts to `VITE_CONTACT_ENDPOINT` when that is set,
+  and otherwise keeps the message in the browser and logs it, so the flow works while we build. Set
+  `VITE_CONTACT_ENDPOINT` and `VITE_CONTACT_EMAIL` before launch. Nothing is hardcoded, and the
+  form never talks to the internal backend.
+- **The logo is a hand-drawn SVG.** Two slightly offset rounded squares in the brand blue, an old
+  block becoming a new one. It is monochrome and reads at a small size. "Corewise" is still a
+  placeholder name, and the README says where to change it.
+- **Bundle.** The main bundle is about 126 KB gzipped: React, GSAP, ScrollTrigger, Lenis, and the
+  app. The 3D and three.js are split into a separate chunk that loads only when shown. The build
+  type-checks and lints before it bundles.

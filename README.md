@@ -10,23 +10,25 @@ This repo holds three things:
   Java, and checks the new code behaves like the old code. Only our team uses it.
 - **frontend** is the screens our engineers use, built with React and IBM Carbon.
 - **website** is the small public site, just enough to show banks we are real. It is its own
-  React and Carbon app, fully separate from the internal tool.
+  app, fully separate from the internal tool. React and TypeScript with Tailwind and
+  shadcn/ui, plus a little motion: GSAP, Lenis, and one small 3D moment in the hero.
 
 ## Layout
 
 ```
 backend/    Java 21 + Spring Boot API, PostgreSQL, Flyway migrations
 frontend/   The internal tool: React + IBM Carbon (TypeScript)
-website/    The public site: a separate React + IBM Carbon app
+website/    The public site: a separate React + Tailwind + shadcn/ui app
 docs/       Notes and the running list of decisions
 ```
 
 A few top-level folders are third-party source we downloaded only for reference, and Git
 ignores all of them: `carbon-main` (IBM Carbon), `GSAP-master`, `lenis-main`,
-`react-three-fiber-master`, and `ui-main`. They are not part of our app. Where we actually
-use one of these libraries we pull it in as a normal package instead — for example the
-frontend and website depend on the official `@carbon/react` rather than the `carbon-main`
-source.
+`react-three-fiber-master`, and `ui-main` (shadcn/ui). They are not part of our app. Where we
+actually use one of these libraries, we pull it in as a normal package instead. The frontend
+uses the official `@carbon/react`. The public site uses `tailwindcss`, `gsap`, `lenis`,
+`@react-three/fiber`, and `@react-three/drei`, and its shadcn/ui components are generated into
+the project rather than imported.
 
 ## Get the code
 
