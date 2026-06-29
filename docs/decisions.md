@@ -182,3 +182,35 @@ A plain log of the choices we made while building, so anyone picking this up lat
 - **Bundle.** The main bundle is about 126 KB gzipped: React, GSAP, ScrollTrigger, Lenis, and the
   app. The 3D and three.js are split into a separate chunk that loads only when shown. The build
   type-checks and lints before it bundles.
+
+
+
+## 2026-06-29, the real verification engine
+
+- **Verification now actually runs both sides.** It was a shell before: a person typed the
+  expected output and we compared strings. Now the engine compiles and runs the original
+  COBOL to get the true expected output, compiles and runs the approved Java the same way,
+  and compares the two. This is the core of what we sell, so it had to become real.
+- **GnuCOBOL runs the old COBOL.** We installed a known Windows build of GnuCOBOL 3.2 that
+  bundles its own C compiler, with no admin rights, and checked it against the checksum the
+  Chocolatey package publishes. The backend points at it with `app.verify.gnucobol-home`.
+  The Java side uses the JDK the backend already runs on.
+- **Every run is sandboxed.** A separate process, a throwaway temp folder, a hard timeout
+  that kills a program that runs too long, and the folder is deleted afterward. This is
+  process level isolation, not a container yet. A comment in the code says container
+  isolation is the production step. We do not block network at the OS level on this
+  machine, which is an honest limit.
+- **A case is just inputs now.** A person no longer types the expected output. The AI can
+  still draft input cases, which a person confirms. The COBOL gives the golden answer.
+- **The compare options are visible.** Trim trailing spaces, and a small numeric tolerance,
+  both shown with the result. A formatting only difference is flagged apart from a real
+  behavior difference, so the two are never confused.
+- **We store the whole picture for each run.** The inputs, the COBOL output, the Java
+  output, pass or fail, the diff, the settings used, the time, and who ran it. Migration V8
+  adds the columns.
+- **We bumped the AI model to a strong Claude, Sonnet 4.5.** A weak model wrote Java that
+  often did not compile, which makes verification pointless. The model is still read from
+  config and stays swappable.
+- **Proven end to end.** A real interest program: the engine ran the COBOL and a correct
+  Java and they matched, then a buggy Java was caught with a clear diff. This is checked in
+  the build and was also run through the live API.

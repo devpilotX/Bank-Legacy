@@ -36,7 +36,9 @@ The settings that matter most:
   no users yet, to create the first admin so someone can sign in.
 - AI: `APP_AI_PROVIDER` (`openai` or `claude`), plus the key, base URL, and model. For
   OpenRouter, set the provider to `openai`, the base URL to `https://openrouter.ai/api`,
-  the key to your OpenRouter key, and the model to something like `openai/gpt-4o-mini`.
+  the key to your OpenRouter key, and the model to a strong current one like
+  `anthropic/claude-sonnet-4.5`. Verification needs the translated Java to actually
+  compile and run, so a weak model is a poor fit.
 - CORS: `APP_CORS_ORIGINS`. The web address the internal tool is served from. Only that
   origin may call the API from a browser.
 
@@ -55,6 +57,38 @@ Check the backend is alive:
 ```bash
 curl http://localhost:8080/health
 ```
+
+## Verification needs GnuCOBOL
+
+Verification really runs both sides now. For a unit of work, the engine compiles and
+runs the original COBOL to get the true expected output, compiles and runs the approved
+Java the same way, and compares the two. So the machine that runs the backend needs:
+
+- GnuCOBOL, so we can compile and run the old COBOL. On Windows we use a known build of
+  GnuCOBOL 3.2 that bundles its own C compiler. Point the backend at it with
+  `app.verify.gnucobol-home` (or the `APP_VERIFY_GNUCOBOL_HOME` environment variable),
+  set to the folder that holds its `bin`, `config`, and `copy` folders. If GnuCOBOL is
+  not installed, verification cannot run, but the rest of the app still works.
+- A JDK for `javac` and `java`. The backend already runs on one, and the engine uses
+  that same JDK, so there is nothing extra to install.
+
+Each run is sandboxed: its own process, a throwaway temp folder, and a hard timeout that
+kills a program that runs too long. The folder is deleted afterward.
+
+Honest limits to keep in mind:
+
+- The compare offers visible options: trim trailing spaces, and a small numeric
+  tolerance. Whatever is used is shown with the result, never a silent guess. A
+  difference that is only formatting is flagged apart from a real behavior difference.
+- The sandbox is process level, not a locked down container. It does not block network
+  on its own. For production near a bank, each run should later go inside stronger
+  container isolation. Process isolation with a hard timeout and a clean temp folder is
+  the safe start, not the finish.
+- It depends on good test inputs. The cases pin down behavior, so a thin set proves
+  less. Add the inputs that matter.
+- It runs programs that read standard input and write standard output, and it can stage
+  input files for programs that read files. A program made of several COBOL pieces that
+  call each other would also need those pieces.
 
 ## Run the whole thing with Docker
 
