@@ -7,7 +7,8 @@ This repo holds three things:
 
 - **backend** is the internal web app's API. Java 21 and Spring Boot. It takes in old code,
   calls a hosted AI to explain it, maps how the parts connect, helps rewrite pieces into
-  Java, and checks the new code behaves like the old code. Only our team uses it.
+  Java, and checks the new Java behaves like the old code by compiling and running both and
+  comparing them. Only our team uses it.
 - **frontend** is the screens our engineers use, built with React and IBM Carbon.
 - **website** is the small public site, just enough to show banks we are real. It is its own
   app, fully separate from the internal tool. React and TypeScript with Tailwind and
@@ -20,6 +21,7 @@ backend/    Java 21 + Spring Boot API, PostgreSQL, Flyway migrations
 frontend/   The internal tool: React + IBM Carbon (TypeScript)
 website/    The public site: a separate React + Tailwind + shadcn/ui app
 docs/       Notes and the running list of decisions
+report/     A plain-English report on the project as a Word file, plus the script that builds it
 ```
 
 A few top-level folders are third-party source we downloaded only for reference, and Git
@@ -47,6 +49,9 @@ cd Bank-Legacy
 - Node 22 or newer (this machine runs Node 24)
 - PostgreSQL 14 or newer (this machine runs PostgreSQL 18)
 - Git
+- GnuCOBOL, only if you want to run verification. The engine compiles and runs the old COBOL
+  with it to check the new Java matches. The rest of the app runs fine without it. See
+  `docs/runbook.md` for the setup.
 
 ## Run the backend
 
