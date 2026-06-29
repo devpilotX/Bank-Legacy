@@ -8,7 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 
-/** An input and the output the old system gave for it. Maps to verification_cases. */
+/**
+ * A test case is now just the inputs. The expected output is no longer typed by a
+ * person; the engine gets it by running the original COBOL. Maps to verification_cases.
+ */
 @Entity
 @Table(name = "verification_cases")
 public class VerificationCase {
@@ -23,10 +26,16 @@ public class VerificationCase {
     @Column(nullable = false)
     private String name;
 
+    /** What we feed the program on standard input. May be empty. */
     @Column
     private String input;
 
-    @Column(name = "expected_output", nullable = false)
+    /** Optional JSON of file name to content, for programs that read input files. */
+    @Column(name = "input_files")
+    private String inputFiles;
+
+    /** Optional and legacy. The engine now derives the expected output from the COBOL. */
+    @Column(name = "expected_output")
     private String expectedOutput;
 
     @Column(nullable = false)
@@ -47,12 +56,12 @@ public class VerificationCase {
     protected VerificationCase() {
     }
 
-    public VerificationCase(Long workUnitId, String name, String input, String expectedOutput,
+    public VerificationCase(Long workUnitId, String name, String input, String inputFiles,
                             String origin, String status, Long createdBy) {
         this.workUnitId = workUnitId;
         this.name = name;
         this.input = input;
-        this.expectedOutput = expectedOutput;
+        this.inputFiles = inputFiles;
         this.origin = origin;
         this.status = status;
         this.createdBy = createdBy;
@@ -72,6 +81,10 @@ public class VerificationCase {
 
     public String getInput() {
         return input;
+    }
+
+    public String getInputFiles() {
+        return inputFiles;
     }
 
     public String getExpectedOutput() {

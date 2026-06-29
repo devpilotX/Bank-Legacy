@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Verification: proving the new Java behaves like the old code. Engineers add cases
- * by hand or let the AI draft some to confirm, then run the new Java's outputs against
- * them and read the pass or fail results.
+ * Verification: proving the new Java behaves like the old code. Engineers add input
+ * cases by hand or let the AI draft some to confirm, then press run. The engine runs the
+ * old COBOL and the new Java on each case and reports a real pass or fail with a diff.
  */
 @RestController
 public class VerificationController {
@@ -37,7 +37,7 @@ public class VerificationController {
                                             @Valid @RequestBody AddVerificationCaseRequest request,
                                             @AuthenticationPrincipal Jwt jwt) {
         return VerificationCaseResponse.from(verification.addCase(workUnitId, request.name(),
-            request.input(), request.expectedOutput(), currentUserId(jwt)));
+            request.input(), request.inputFiles(), currentUserId(jwt)));
     }
 
     @PostMapping("/api/work-units/{workUnitId}/verification-cases/ai-draft")
@@ -60,11 +60,12 @@ public class VerificationController {
 
     @PostMapping("/api/work-units/{workUnitId}/verify")
     public VerificationResultsResponse verify(@PathVariable Long workUnitId,
-                                              @Valid @RequestBody RunVerificationRequest request) {
-        List<VerificationService.CaseActual> actuals = request.results().stream()
-            .map(outcome -> new VerificationService.CaseActual(outcome.caseId(), outcome.actualOutput()))
-            .toList();
-        return VerificationResultsResponse.from(verification.runForUnit(workUnitId, actuals));
+                                              @RequestBody(required = false) RunVerificationRequest request,
+                                              @AuthenticationPrincipal Jwt jwt) {
+        RunVerificationRequest safe =
+            request == null ? new RunVerificationRequest(null, null, null) : request;
+        return VerificationResultsResponse.from(verification.runForUnit(workUnitId,
+            safe.caseIds(), safe.trimTrailingSpace(), safe.numericTolerance(), currentUserId(jwt)));
     }
 
     @GetMapping("/api/work-units/{workUnitId}/verification")
