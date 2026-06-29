@@ -1,0 +1,13 @@
+{
+  "name": "bank-legacy-report",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Builds the project report as a real Word .docx file with the docx package.",
+  "scripts": {
+    "build": "node generate-report.mjs"
+  },
+  "dependencies": {
+    "docx": "^9.7.1"
+  }
+}
