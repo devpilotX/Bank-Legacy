@@ -607,3 +607,38 @@ body {
     color: #000 !important;
   }
 }
+
+
+/* Verification engine: settings row, run results, and output blocks. */
+.verify-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+  margin: 1rem 0 1.5rem;
+}
+
+.verify-run {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--cds-border-subtle, #e0e0e0);
+  padding-top: 0.75rem;
+}
+
+.verify-output {
+  background: var(--cds-layer-accent, #f4f4f4);
+  padding: 0.75rem;
+  border-radius: 4px;
+  overflow: auto;
+  max-height: 18rem;
+  white-space: pre;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.verify-details {
+  margin-top: 0.5rem;
+}
+
+.verify-details summary {
+  cursor: pointer;
+}

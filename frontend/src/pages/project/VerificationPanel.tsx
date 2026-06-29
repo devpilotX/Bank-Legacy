@@ -1,29 +1,33 @@
 import { useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button, InlineNotification, Modal, Tag, TextArea, TextInput, Tile } from '@carbon/react';
+import { Button, Checkbox, InlineNotification, Modal, Tag, TextArea, TextInput, Tile } from '@carbon/react';
 import { addCase, confirmCase, draftCases, getVerification, runVerification } from '../../api/verification';
 import { ApiClientError } from '../../api/types';
-import type { VerificationResults } from '../../api/types';
+import type { VerificationResults, VerificationRun } from '../../api/types';
 import { ErrorState } from '../../components/ErrorState';
 import { LoadingState } from '../../components/LoadingState';
 import { useApi } from '../../hooks/useApi';
 
 /**
- * Verification for one unit. Cases are an input and the output the old system gave.
- * The AI can draft cases, shown as suggestions a person confirms. To run a check, the
- * engineer enters what the new Java produced; we compare it to the expected output
- * and show a clear pass or fail, with the reason on a failure.
+ * Verification for one unit. A case is a set of inputs. When you press run, the engine
+ * runs the original COBOL to get the expected output, runs the new Java on the same
+ * input, and compares them. We show a real pass or fail, and on a failure we show the
+ * diff and what each side produced.
  */
 export function VerificationPanel({ unitId }: { unitId: number }) {
   const state = useApi<VerificationResults>(() => getVerification(unitId), [unitId]);
-  const [actuals, setActuals] = useState<Record<number, string>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Comparison settings, always visible so a result is never a silent guess.
+  const [trimTrailingSpace, setTrimTrailingSpace] = useState(true);
+  const [numericTolerance, setNumericTolerance] = useState('0');
+
+  // Add-a-case modal.
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [input, setInput] = useState('');
-  const [expected, setExpected] = useState('');
+  const [inputFiles, setInputFiles] = useState('');
   const [saving, setSaving] = useState(false);
 
   function fail(caught: unknown, fallback: string) {
@@ -31,20 +35,14 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
   }
 
   async function run() {
-    const results = (state.data?.cases ?? [])
-      .filter((item) => item.verificationCase.status === 'confirmed')
-      .map((item) => ({
-        caseId: item.verificationCase.id,
-        actualOutput: actuals[item.verificationCase.id] ?? '',
-      }));
-    if (results.length === 0) {
-      setError('Confirm at least one case before running the checks.');
-      return;
-    }
     setBusy(true);
     setError(null);
     try {
-      await runVerification(unitId, results);
+      const tolerance = Number(numericTolerance);
+      await runVerification(unitId, {
+        trimTrailingSpace,
+        numericTolerance: Number.isFinite(tolerance) ? tolerance : 0,
+      });
       state.reload();
     } catch (caught) {
       fail(caught, 'We could not run the checks.');
@@ -77,8 +75,8 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
   }
 
   async function createCase() {
-    if (!name.trim() || !expected.trim()) {
-      setError('Please add a name and the expected output.');
+    if (!name.trim()) {
+      setError('Please add a name for the case.');
       return;
     }
     setSaving(true);
@@ -87,7 +85,7 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
       await addCase(unitId, {
         name: name.trim(),
         input: input.trim() || undefined,
-        expectedOutput: expected,
+        inputFiles: inputFiles.trim() || undefined,
       });
       setOpen(false);
       state.reload();
@@ -99,6 +97,9 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
   }
 
   const data = state.data;
+  const confirmedCount = (data?.cases ?? []).filter(
+    (item) => item.verificationCase.status === 'confirmed',
+  ).length;
 
   return (
     <div>
@@ -108,7 +109,7 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
           onClick={() => {
             setName('');
             setInput('');
-            setExpected('');
+            setInputFiles('');
             setError(null);
             setOpen(true);
           }}
@@ -116,11 +117,28 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
           Add a case
         </Button>
         <Button size="sm" kind="tertiary" onClick={draft} disabled={busy}>
-          Let the AI draft cases
+          Let the AI draft input cases
         </Button>
-        <Button size="sm" onClick={run} disabled={busy}>
-          {busy ? 'Working...' : 'Run checks'}
+        <Button size="sm" onClick={run} disabled={busy || confirmedCount === 0}>
+          {busy ? 'Running...' : 'Run checks'}
         </Button>
+      </div>
+
+      <div className="verify-settings">
+        <Checkbox
+          id="trim-trailing"
+          labelText="Trim trailing spaces before comparing"
+          checked={trimTrailingSpace}
+          onChange={(_event: unknown, data2: { checked: boolean }) =>
+            setTrimTrailingSpace(data2.checked)
+          }
+        />
+        <TextInput
+          id="numeric-tolerance"
+          labelText="Allowed number difference (0 means exact)"
+          value={numericTolerance}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => setNumericTolerance(event.target.value)}
+        />
       </div>
 
       {data && (
@@ -156,7 +174,9 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
       {state.status === 'ok' &&
         data &&
         (data.cases.length === 0 ? (
-          <p className="page__muted">No cases yet. Add one, or let the AI draft some for you to confirm.</p>
+          <p className="page__muted">
+            No cases yet. Add one, or let the AI draft some inputs for you to confirm.
+          </p>
         ) : (
           <div className="explain__list">
             {data.cases.map(({ verificationCase: item, latestRun }) => {
@@ -177,49 +197,28 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
                     {item.origin === 'ai' && !suggested ? (
                       <span className="page__muted">from the AI, confirmed by a person</span>
                     ) : null}
-                    {latestRun ? (
-                      <Tag type={latestRun.passed ? 'green' : 'red'} size="sm">
-                        {latestRun.passed ? 'Passed' : 'Failed'}
-                      </Tag>
-                    ) : null}
                   </div>
 
-                  {item.input ? (
+                  <p className="verify-field">
+                    <span className="page__muted">Input</span>
+                    <code>{item.input ? item.input : '(no input)'}</code>
+                  </p>
+                  {item.inputFiles ? (
                     <p className="verify-field">
-                      <span className="page__muted">Input</span>
-                      <code>{item.input}</code>
+                      <span className="page__muted">Input files</span>
+                      <code>provided</code>
                     </p>
                   ) : null}
-                  <p className="verify-field">
-                    <span className="page__muted">Expected output</span>
-                    <code>{item.expectedOutput}</code>
-                  </p>
 
                   {suggested ? (
                     <Button size="sm" onClick={() => confirm(item.id)}>
                       Confirm this case
                     </Button>
-                  ) : (
-                    <TextArea
-                      id={`actual-${item.id}`}
-                      labelText="What the new Java produced"
-                      rows={3}
-                      value={actuals[item.id] ?? ''}
-                      onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-                        setActuals((current) => ({ ...current, [item.id]: event.target.value }))
-                      }
-                    />
-                  )}
-
-                  {latestRun && !latestRun.passed && latestRun.detail ? (
-                    <InlineNotification
-                      kind="error"
-                      lowContrast
-                      hideCloseButton
-                      title="This check failed"
-                      subtitle={latestRun.detail}
-                    />
                   ) : null}
+
+                  {latestRun ? <RunView run={latestRun} /> : (
+                    <p className="page__muted">Not run yet.</p>
+                  )}
                 </Tile>
               );
             })}
@@ -236,6 +235,9 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
         onRequestSubmit={createCase}
       >
         <div className="form-stack">
+          <p className="page__muted">
+            A case is just the inputs. We get the expected output by running the original COBOL.
+          </p>
           {error && (
             <InlineNotification
               kind="error"
@@ -253,20 +255,57 @@ export function VerificationPanel({ unitId }: { unitId: number }) {
           />
           <TextArea
             id="case-input"
-            labelText="Input (optional)"
+            labelText="Input on standard input (optional)"
             rows={3}
             value={input}
             onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setInput(event.target.value)}
           />
           <TextArea
-            id="case-expected"
-            labelText="Expected output"
+            id="case-input-files"
+            labelText='Input files as JSON, for programs that read files (optional). For example {"ACCTMAST": "..."}'
             rows={3}
-            value={expected}
-            onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setExpected(event.target.value)}
+            value={inputFiles}
+            onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setInputFiles(event.target.value)}
           />
         </div>
       </Modal>
+    </div>
+  );
+}
+
+/** Shows one run's result: the pass or fail, the plain message, and the diff on a fail. */
+function RunView({ run }: { run: VerificationRun }) {
+  const formattingOnly = run.passed && run.differenceKind === 'formatting';
+  return (
+    <div className="verify-run">
+      <div className="explain__item-head">
+        <Tag type={run.passed ? 'green' : 'red'} size="sm">
+          {run.passed ? 'Passed' : 'Failed'}
+        </Tag>
+        {formattingOnly ? (
+          <Tag type="teal" size="sm">
+            Formatting only
+          </Tag>
+        ) : null}
+      </div>
+      {run.detail ? <p>{run.detail}</p> : null}
+
+      {!run.passed && run.diff ? (
+        <>
+          <p className="page__muted">What differs</p>
+          <pre className="verify-output">{run.diff}</pre>
+        </>
+      ) : null}
+
+      {!run.passed && (run.cobolOutput || run.javaOutput) ? (
+        <details className="verify-details">
+          <summary>See both outputs</summary>
+          <p className="page__muted">COBOL produced</p>
+          <pre className="verify-output">{run.cobolOutput ?? ''}</pre>
+          <p className="page__muted">Java produced</p>
+          <pre className="verify-output">{run.javaOutput ?? ''}</pre>
+        </details>
+      ) : null}
     </div>
   );
 }

@@ -107,7 +107,7 @@ export type VerificationCase = {
   workUnitId: number;
   name: string;
   input?: string | null;
-  expectedOutput: string;
+  inputFiles?: string | null;
   origin: string;
   status: string;
   createdBy?: number | null;
@@ -118,8 +118,14 @@ export type VerificationRun = {
   id: number;
   caseId: number;
   passed: boolean;
+  outcome?: string | null;
   detail?: string | null;
-  actualOutput?: string | null;
+  cobolOutput?: string | null;
+  javaOutput?: string | null;
+  diff?: string | null;
+  differenceKind?: string | null;
+  normalizedTrailingSpace?: boolean | null;
+  numericTolerance?: number | null;
   createdAt?: string | null;
 };
 
