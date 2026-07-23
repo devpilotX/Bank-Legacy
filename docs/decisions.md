@@ -214,3 +214,12 @@ A plain log of the choices we made while building, so anyone picking this up lat
 - **Proven end to end.** A real interest program: the engine ran the COBOL and a correct
   Java and they matched, then a buggy Java was caught with a clear diff. This is checked in
   the build and was also run through the live API.
+
+
+
+## 2026-07-23, docs checkpoint
+
+- **Repo checkpoint.** Working tree was clean and level with `origin/main`, so this is a
+  small housekeeping note to mark where the project stands after the verification-engine
+  hardening pass: the engine runs both the old COBOL and the new Java, compares them with
+  visible options, and stores the full picture of every run. No code behavior changed here.
